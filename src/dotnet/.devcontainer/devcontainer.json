@@ -1,0 +1,23 @@
+{
+  "name": "devcontainer-dotnet",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "DavidAnson.vscode-markdownlint",
+        "EditorConfig.EditorConfig",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml"
+      ]
+    }
+  },
+  "dockerFile": "Dockerfile",
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2.0.0": {
+      "version": "8.0.100-preview.7.23376.3"
+    }
+  }
+}

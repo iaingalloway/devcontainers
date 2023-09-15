@@ -1,0 +1,54 @@
+name: Publish devcontainers
+
+on:
+  pull_request:
+  push:
+    tags:
+      - v*
+
+jobs:
+  publish-dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish dotnet devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        with:
+          image: dotnet
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish go devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        with:
+          image: go
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-hugo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish dotnet devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        with:
+          image: hugo
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish dotnet devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        with:
+          image: javascript
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          component-name: node
+
+  publish-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish dotnet devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        with:
+          image: python
+          github-token: ${{ secrets.GITHUB_TOKEN }}
