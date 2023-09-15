@@ -45,7 +45,7 @@ runs:
     - name: Extract component version from devcontainer.json
       id: component-version
       run: |
-        VERSION=$(jq -r '.features | to_entries[0].value.version' ./src/${{ inputs.image }}/.devcontainer/devcontainer.json)
+        VERSION=$(jq -r '.features | to_entries[0].value.version' ./src/devcontainers/${{ inputs.image }}/.devcontainer/devcontainer.json)
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
       shell: bash
 
@@ -62,5 +62,5 @@ runs:
       with:
         imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
         imageTag: ${{ steps.gitversion.outputs.MajorMinorPatch }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }}
-        subFolder: ./src/${{ inputs.image }}
+        subFolder: ./src/devcontainers/${{ inputs.image }}
         cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
