@@ -11,7 +11,10 @@
         "EditorConfig.EditorConfig",
         "redhat.vscode-xml",
         "redhat.vscode-yaml"
-      ]
+      ],
+      "settings": {
+        "dotnet.preferRuntimeFromSDK": true
+      }
     }
   },
   "dockerFile": "Dockerfile",
