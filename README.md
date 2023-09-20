@@ -66,3 +66,7 @@ This repository also contains a [devcontainer feature](https://github.com/devcon
     "ghcr.io/mpriscella/features/kind:1": {}
   },
 ```
+
+## Actions
+
+This repository also contains various utility actions. Refer to the action README files under .github/actions for details.
