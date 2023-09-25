@@ -41,7 +41,7 @@ inputs:
     description: >
       List packages marked for deletion without removing them
     required: false
-    default: false
+    default: true
 
 runs:
   using: node20
