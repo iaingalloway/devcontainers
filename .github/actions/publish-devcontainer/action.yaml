@@ -69,16 +69,16 @@ runs:
       with:
         images: ghcr.io/${{ github.repository }}
         tags: |
-          type=raw,value=latest,enable={{is_default_branch}}
+          type=raw,value=latest,enable=${{ startsWith(github.ref, github.event.repository.default_branch) }}
           type=ref,event=branch
           type=ref,event=pr
-          type=raw,value=${{ steps.gitversion.outputs.semVer }},enable={{is_default_branch}}
-          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }},enable={{ is_default_branch }}
-          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }},enable={{ is_default_branch }}
+          type=raw,value=${{ steps.gitversion.outputs.semVer }},enable=${{ startsWith(github.ref, github.event.repository.default_branch) }}
+          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }},enable=${{ startsWith(github.ref, github.event.repository.default_branch) }}
+          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }},enable=${{ startsWith(github.ref, github.event.repository.default_branch) }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}
-          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ is_default_branch && steps.component-version.outputs.version-found == 'true' }}
-          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ is_default_branch && steps.component-version.outputs.version-found == 'true' }}
+          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ startsWith(github.ref, github.event.repository.default_branch) && steps.component-version.outputs.version-found == 'true' }}
+          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ startsWith(github.ref, github.event.repository.default_branch) && steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
 
