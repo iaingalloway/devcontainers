@@ -44,6 +44,7 @@ When you open the project in Visual Studio Code, you will be prompted to reopen 
 To build the images locally, run the following commands:
 
 ```bash
+devcontainer build --workspace-folder ./src/devcontainers/base --image-name ghcr.io/iaingalloway/devcontainers/base:local
 devcontainer build --workspace-folder ./src/devcontainers/dotnet --image-name ghcr.io/iaingalloway/devcontainers/dotnet:local
 devcontainer build --workspace-folder ./src/devcontainers/go --image-name ghcr.io/iaingalloway/devcontainers/go:local
 devcontainer build --workspace-folder ./src/devcontainers/hugo --image-name ghcr.io/iaingalloway/devcontainers/hugo:local

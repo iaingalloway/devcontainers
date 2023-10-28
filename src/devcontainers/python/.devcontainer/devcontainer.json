@@ -1,16 +1,12 @@
 {
-  "name": "devcontainer-dotnet",
+  "name": "devcontainer-python",
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-azuretools.vscode-docker",
-        "ms-kubernetes-tools.vscode-kubernetes-tools",
-        "DavidAnson.vscode-markdownlint",
-        "EditorConfig.EditorConfig"
       ]
     }
   },
-  "dockerFile": "Dockerfile",
+  "image": "gchr.io/iaingalloway/devcontainers/base:latest",
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11.5"
