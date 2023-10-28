@@ -49,9 +49,9 @@ runs:
     - name: Extract component version from devcontainer.json
       id: component-version
       run: |
-        DEVCONTAINER_FILE=./src/devcontainers/${{ inputs.image }}/.devcontainer/devcontainer.json
+        DEVCONTAINER_FILE=devcontainer.json
         if [[ -f "$DEVCONTAINER_FILE" ]]; then
-          VERSION=$(jq -r 'select(.features and .features | to_entries[0].value.version) | .features | to_entries[0].value.version' $DEVCONTAINER_FILE)
+          VERSION=$(jq -r '.features | to_entries[0].value.version' $DEVCONTAINER_FILE)
           if [[ "$VERSION" != "null" ]]; then
             echo "version=${VERSION}" >> $GITHUB_OUTPUT
             echo "version-found=true" >> $GITHUB_OUTPUT
