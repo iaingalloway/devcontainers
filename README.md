@@ -51,22 +51,6 @@ devcontainer build --workspace-folder ./src/devcontainers/javascript --image-nam
 devcontainer build --workspace-folder ./src/devcontainers/python --image-name ghcr.io/iaingalloway/devcontainers/python:local
 ```
 
-## Features
-
-This repository also contains a [devcontainer feature](https://github.com/devcontainers/features) that pulls dotfiles from [iaingalloway/env](https://github.com/iaingalloway/env). It can be used by adding the following to your `devcontainer.json` file:
-
-```json
-  "features": {
-    "ghcr.io/iaingalloway/devcontainers/env:1.0.0": {},
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-      "minikube": "none"
-    },
-    "ghcr.io/devcontainers-contrib/features/starship:1": {},
-    "ghcr.io/mpriscella/features/kind:1": {}
-  },
-```
-
 ## Actions
 
 This repository also contains various utility actions. Refer to the action README files under .github/actions for details.

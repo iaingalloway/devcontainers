@@ -1,9 +1,0 @@
-{
-  "name": "Env",
-  "id": "env",
-  "version": "1.0.0",
-  "description": "A feature to add my dotfiles to a devcontainer.",
-  "installsAfter": [
-      "ghcr.io/devcontainers/features/common-utils"
-  ]
-}
