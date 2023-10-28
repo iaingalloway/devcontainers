@@ -86,7 +86,7 @@ runs:
     - name: Extract only tag part of full image name
       id: extract-tag-parts
       run: |
-        TAGS=$(echo '${{ steps.meta.outputs.json }}' | jq -r '[.tags[] | split(":") | last] | join(",")')
+        TAGS=$(echo '${{ steps.metadata.outputs.json }}' | jq -r '[.tags[] | split(":") | last] | join(",")')
         echo "$TAGS"
         echo "tags=$TAGS" >> $GITHUB_OUTPUT
       shell: bash
