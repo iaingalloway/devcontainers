@@ -6,7 +6,7 @@
       ]
     }
   },
-  "image": "gchr.io/iaingalloway/devcontainers/base:latest",
+  "image": "ghcr.io/iaingalloway/devcontainers/base:latest",
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11.5"

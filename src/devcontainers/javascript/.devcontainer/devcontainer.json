@@ -6,7 +6,7 @@
       ]
     }
   },
-  "image": "gchr.io/iaingalloway/devcontainers/base:latest",
+  "image": "ghcr.io/iaingalloway/devcontainers/base:latest",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20.6.1"
