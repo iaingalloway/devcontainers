@@ -85,7 +85,7 @@ runs:
     - name: Extract only tag part of full image name
       id: extract-tag-parts
       run: |
-        TAGS=$(echo '${{ steps.meta.outputs.json }}' | jq '{ tags: [.tags[] | split(":") | last] }')
+        TAGS=$(echo '${{ steps.meta.outputs.json }}' | jq -r '[.tags[] | split(":") | last] | join(",")')
         echo "$TAGS"
         echo "tags=$TAGS" >> $GITHUB_OUTPUT
       shell: bash
@@ -102,6 +102,6 @@ runs:
       uses: devcontainers/ci@v0.3
       with:
         imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
-        imageTag: ${{ join(fromJson(steps.extract-tag-parts.outputs.tags).tags, ',') }}
+        imageTag: ${{ steps.extract-tag-parts.outputs.tags }}
         subFolder: ./src/devcontainers/${{ inputs.image }}
         cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
