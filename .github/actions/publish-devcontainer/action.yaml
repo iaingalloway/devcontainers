@@ -64,7 +64,7 @@ runs:
       shell: bash
 
     - name: Determine image tags using Docker metadata action
-      id: meta
+      id: metadata
       uses: docker/metadata-action@v5
       with:
         images: ghcr.io/${{ github.repository }}
@@ -77,15 +77,16 @@ runs:
           type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' && endsWith(github.ref, github.event.repository.default_branch) }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}
+          type=raw,value=${{ steps.gitversion.outputs.semVer }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ endsWith(github.ref, github.event.repository.default_branch) && steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ endsWith(github.ref, github.event.repository.default_branch) && steps.component-version.outputs.version-found == 'true' }}
-          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ endsWith(github.ref, github.event.repository.default_branch) && steps.component-version.outputs.version-found == 'true' }}
+          type=raw,value=${{ steps.gitversion.outputs.major }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ endsWith(github.ref, github.event.repository.default_branch) && steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
 
     - name: Extract only tag part of full image name
       id: extract-tag-parts
       run: |
-        TAGS=$(echo '${{ steps.meta.outputs.json }}' | jq -r '[.tags[] | split(":") | last] | join(",")')
+        TAGS=$(echo '${{ steps.metadata.outputs.json }}' | jq -r '[.tags[] | split(":") | last] | join(",")')
         echo "$TAGS"
         echo "tags=$TAGS" >> $GITHUB_OUTPUT
       shell: bash
