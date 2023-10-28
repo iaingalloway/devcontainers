@@ -36,22 +36,32 @@ runs:
       id: gitversion
       uses: gittools/actions/gitversion/execute@v0.10.2
 
-    # - name: Determine component name
-    #   id: component-name
-    #   run: |
-    #     NAME="${{ inputs.component-name }}"
-    #       if [ -z "$NAME" ]; then
-    #         NAME="${{ inputs.image }}"
-    #       fi
-    #       echo "name=${NAME}" >> $GITHUB_OUTPUT
-    #   shell: bash
+    - name: Determine component name
+      id: component-name
+      run: |
+        NAME="${{ inputs.component-name }}"
+          if [ -z "$NAME" ]; then
+            NAME="${{ inputs.image }}"
+          fi
+          echo "name=${NAME}" >> $GITHUB_OUTPUT
+      shell: bash
 
-    # - name: Extract component version from devcontainer.json
-    #   id: component-version
-    #   run: |
-    #     VERSION=$(jq -r '.features | to_entries[0].value.version' ./src/devcontainers/${{ inputs.image }}/.devcontainer/devcontainer.json)
-    #     echo "version=${VERSION}" >> $GITHUB_OUTPUT
-    #   shell: bash
+    - name: Extract component version from devcontainer.json
+      id: component-version
+      run: |
+        DEVCONTAINER_FILE=./src/devcontainers/${{ inputs.image }}/.devcontainer/devcontainer.json
+        if [[ -f "$DEVCONTAINER_FILE" ]]; then
+          VERSION=$(jq -r 'select(.features and .features | to_entries[0].value.version) | .features | to_entries[0].value.version' $DEVCONTAINER_FILE)
+          if [[ "$VERSION" != "null" ]]; then
+            echo "version=${VERSION}" >> $GITHUB_OUTPUT
+            echo "version-found=true" >> $GITHUB_OUTPUT
+          else
+            echo "Key does not exist in $DEVCONTAINER_FILE."
+          fi
+        else
+          echo "$DEVCONTAINER_FILE does not exist."
+        fi
+      shell: bash
 
     - name: Determine image tags using Docker metadata action
       id: meta
@@ -63,14 +73,14 @@ runs:
           type=ref,event=branch
           type=ref,event=pr
           type=raw,value=${{ steps.gitversion.outputs.semVer }},enable={{is_default_branch}}
-          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }},enable={{is_default_branch}}
-          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }},enable={{is_default_branch}}
+          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }},enable={{ is_default_branch }}
+          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }},enable={{ is_default_branch }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}
-          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable={{ is_default_branch }}
-          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable={{ is_default_branch }}
-          type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }}
-          type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }}
+          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ is_default_branch && steps.component-version.outputs.version-found == 'true' }}
+          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ is_default_branch && steps.component-version.outputs.version-found == 'true' }}
+          type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
+          type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
 
     - name: Authenticate with registry
       if: github.event_name != 'pull_request'
@@ -80,15 +90,10 @@ runs:
         username: ${{ github.actor }}
         password: ${{ inputs.github-token }}
 
-    - name: Echo tags
-      run: |
-        echo "${{ join(fromJson(steps.meta.outputs.json).tags, ',') }}"
-      shell: bash
-
-    # - name: Build devcontainer
-    #   uses: devcontainers/ci@v0.3
-    #   with:
-    #     imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
-    #     imageTag: ${{ fromJson(steps.meta.outputs.json) }}
-    #     subFolder: ./src/devcontainers/${{ inputs.image }}
-    #     cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
+    - name: Build devcontainer
+      uses: devcontainers/ci@v0.3
+      with:
+        imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
+        imageTag: ${{ join(fromJson(steps.meta.outputs.json).tags, ',') }}
+        subFolder: ./src/devcontainers/${{ inputs.image }}
+        cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
