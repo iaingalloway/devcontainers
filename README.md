@@ -1,6 +1,10 @@
 # Devcontainers
 
-This repository contains prebuilt devcontainer images.
+One of the joys of working with devcontainers is that a new user, on a new machine, can be up-and-running with a fully configured development environment in minutes. However, one of the challenges with working with devcontainers built from Dockerfiles is that they can be cumbersome, time-consuming, and error-prone to build. This is especially true when you are working with multiple devcontainers, or you are working on a project that uses a devcontainer that you don't own. Mechanisms like devcontainer features can help to reduce the complexity of developing devcontainers, but they can become burdensome as they need to be baked into the final image - often at a cost of poor layer caching.
+
+Using a pre-built devcontainer image can help to solve these problems.
+
+This repository contains prebuilt devcontainer images for some of the languages and frameworks I am most frequently building prototypes in. This not only helps me to build proofs-of-concept faster, but also helps me reliably share those proofs-of-concept with other developers.
 
 ## Prerequisites
 
@@ -20,11 +24,11 @@ This repository contains prebuilt devcontainer images.
 
 The following images are available:
 
-- .NET 8: `ghcr.io/iaingalloway/devcontainers/dotnet:1.0.0-dotnet8.0.100-preview.7.23376.3`
-- Go 1.21: `ghcr.io/iaingalloway/devcontainers/go:1.0.0-go1.21.0`
-- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.0.0-hugo0.118.2`
-- Javascript (Node 20.6.1): `ghcr.io/iaingalloway/devcontainers/javascript:1.0.0-node20.6.1`
-- Python 3.11: `ghcr.io/iaingalloway/devcontainers/python:1.0.0-python3.11.5`
+- .NET 8: `ghcr.io/iaingalloway/devcontainers/dotnet:1.0-dotnet8.0.100-preview.7.23376.3`
+- Go 1.21: `ghcr.io/iaingalloway/devcontainers/go:1.0-go1.21.0`
+- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.0-hugo0.118.2`
+- Javascript (Node 20.6.1): `ghcr.io/iaingalloway/devcontainers/javascript:1.0-node20.6.1`
+- Python 3.11: `ghcr.io/iaingalloway/devcontainers/python:1.0-python3.11.5`
 
 ### Configure a project to use a devcontainer
 
@@ -33,11 +37,30 @@ The following images are available:
 
 ```json
 {
-    "image": "ghcr.io/iaingalloway/devcontainers/dotnet:1.0.0-dotnet8.0.100-preview.7.23376.3",
+  "name": "My Awesome Project Devcontainer",
+  "image": "ghcr.io/iaingalloway/devcontainers/dotnet:1.0.0-dotnet8.0.100-preview.7.23376.3",
+  "runArgs": [
+    "--name",
+    "my-awesome-project-devcontainer",
+    "--network=host"
+  ]
 }
 ```
 
 When you open the project in Visual Studio Code, you will be prompted to reopen the project in a devcontainer.
+
+### Features
+
+The devcontainers in this repo have the following features:
+
+- [Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/) using the [Docker outside of Docker](https://github.com/devcontainers/features/tree/main/src/docker-outside-of-docker) pattern, allowing the devcontainer to interact with the host's docker daemon
+- [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/)
+- [Helm](https://helm.sh/)
+- [Starship](https://starship.rs/) prompt
+- [Kind](https://kind.sigs.k8s.io/) to create Kubernetes clusters on the host's docker daemon for local development
+- [Chezmoi](https://www.chezmoi.io/) to import and manage dotfiles
+
+Additionally, the devcontainers mount `~/.kube/`, `~/.ssh/`, and `~/.gitconfig`. If '~/.gitconfig' contains a key for the user's github username, this is used to configure Chezmoi.
 
 ## Build
 
@@ -52,6 +75,11 @@ devcontainer build --workspace-folder ./src/devcontainers/javascript --image-nam
 devcontainer build --workspace-folder ./src/devcontainers/python --image-name ghcr.io/iaingalloway/devcontainers/python:local
 ```
 
-## Actions
+## Further reading
 
-This repository also contains various utility actions. Refer to the action README files under .github/actions for details.
+- [Developing inside a Container](https://code.visualstudio.com/docs/remote/containers)
+- [Devcontainer CLI](https://code.visualstudio.com/docs/devcontainers/devcontainer-cli)
+- [Devcontainer reference](https://code.visualstudio.com/docs/remote/devcontainerjson-reference)
+- [Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
+- [Docker CLI reference](https://docs.docker.com/engine/reference/commandline/cli/)
+- [Dockerfile best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
