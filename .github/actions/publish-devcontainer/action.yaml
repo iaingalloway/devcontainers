@@ -14,6 +14,10 @@ inputs:
   github-token:
     description: GitHub token
     required: true
+  enable-component-version:
+    description: Enable component version
+    required: false
+    default: 'true'
 
 runs:
   using: composite
@@ -32,22 +36,22 @@ runs:
       id: gitversion
       uses: gittools/actions/gitversion/execute@v0.10.2
 
-    - name: Determine component name
-      id: component-name
-      run: |
-        NAME="${{ inputs.component-name }}"
-          if [ -z "$NAME" ]; then
-            NAME="${{ inputs.image }}"
-          fi
-          echo "name=${NAME}" >> $GITHUB_OUTPUT
-      shell: bash
+    # - name: Determine component name
+    #   id: component-name
+    #   run: |
+    #     NAME="${{ inputs.component-name }}"
+    #       if [ -z "$NAME" ]; then
+    #         NAME="${{ inputs.image }}"
+    #       fi
+    #       echo "name=${NAME}" >> $GITHUB_OUTPUT
+    #   shell: bash
 
-    - name: Extract component version from devcontainer.json
-      id: component-version
-      run: |
-        VERSION=$(jq -r '.features | to_entries[0].value.version' ./src/devcontainers/${{ inputs.image }}/.devcontainer/devcontainer.json)
-        echo "version=${VERSION}" >> $GITHUB_OUTPUT
-      shell: bash
+    # - name: Extract component version from devcontainer.json
+    #   id: component-version
+    #   run: |
+    #     VERSION=$(jq -r '.features | to_entries[0].value.version' ./src/devcontainers/${{ inputs.image }}/.devcontainer/devcontainer.json)
+    #     echo "version=${VERSION}" >> $GITHUB_OUTPUT
+    #   shell: bash
 
     - name: Determine image tags using Docker metadata action
       id: meta
@@ -63,8 +67,8 @@ runs:
           type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }},enable={{is_default_branch}}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}
-          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable={{is_default_branch}}
-          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable={{is_default_branch}}
+          type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable={{ is_default_branch }}
+          type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable={{ is_default_branch }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }}
 
@@ -78,7 +82,7 @@ runs:
 
     - name: Echo tags
       run: |
-        echo "${{ fromJson(steps.meta.outputs.json) }}"
+        echo "${{ fromJson(steps.meta.outputs.json).tags }}"
       shell: bash
 
     # - name: Build devcontainer
