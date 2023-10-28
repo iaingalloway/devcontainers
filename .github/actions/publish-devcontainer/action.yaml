@@ -82,7 +82,7 @@ runs:
 
     - name: Echo tags
       run: |
-        echo "${{ fromJson(steps.meta.outputs.json).tags }}"
+        echo "${{ join(fromJson(steps.meta.outputs.json).tags, ',') }}"
       shell: bash
 
     # - name: Build devcontainer
