@@ -82,6 +82,13 @@ runs:
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}.${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
 
+    - name: Extract only tag part of full image name
+      id: extract-tag-parts
+      run: |
+        TAGS=$(echo "${{ steps.meta.outputs.json }}" | jq '{ tags: [.tags[] | split(":") | last] }')
+        echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+      shell: bash
+
     - name: Authenticate with registry
       if: github.event_name != 'pull_request'
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -93,7 +100,7 @@ runs:
     - name: Build devcontainer
       uses: devcontainers/ci@v0.3
       with:
-        imageName:
-        imageTag: ${{ join(fromJson(steps.meta.outputs.json).tags, ',') }}
+        imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
+        imageTag: ${{ join(fromJson(steps.extract-tag-parts.outputs.tags).tags, ',') }}
         subFolder: ./src/devcontainers/${{ inputs.image }}
         cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
