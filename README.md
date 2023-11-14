@@ -16,7 +16,7 @@ This repository contains prebuilt devcontainer images for some of the languages 
 
 1. Clone this repository
 2. Open the repository in Visual Studio Code
-3. When you see the prompt "Folder contains a Dev Container configuration file, click "Reopen in Container", or select "Dev Containers: Reopen in Container" from the Command Palette (Ctrl+Shift+P)
+3. When you see the prompt "Folder contains a Dev Container configuration file", click "Reopen in Container", or select "Dev Containers: Reopen in Container" from the Command Palette (Ctrl+Shift+P)
 
 ## Using the devcontainers in a project
 
