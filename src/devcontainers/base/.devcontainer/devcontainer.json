@@ -1,5 +1,5 @@
 {
-  "name": "devcontainer-dotnet",
+  "name": "devcontainer-base",
   "customizations": {
     "vscode": {
       "extensions": [
