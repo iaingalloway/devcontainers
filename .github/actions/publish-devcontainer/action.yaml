@@ -49,7 +49,7 @@ runs:
     - name: Extract component version from devcontainer.json
       id: component-version
       run: |
-        DEVCONTAINER_FILE=./src/devcontainers/${{ inputs.image }}/.devcontainer/devcontainer.json
+        DEVCONTAINER_FILE=./src/${{ inputs.image }}/.devcontainer/devcontainer.json
         if [[ -f "$DEVCONTAINER_FILE" ]]; then
           VERSION=$(jq -r '.features | to_entries[0].value.version' $DEVCONTAINER_FILE)
           if [[ "$VERSION" != "null" ]]; then
@@ -95,7 +95,7 @@ runs:
       id: set-base-image-tag
       run: |
         FIRST_TAG=$(echo "${{ steps.extract-tag-parts.outputs.tags }}" | cut -d',' -f1)
-        find "./src/devcontainers/${{ inputs.image }}" -type f -exec sed -i "s/base:local/base:$FIRST_TAG/g" {} +
+        find "./src/${{ inputs.image }}" -type f -exec sed -i "s/base:local/base:$FIRST_TAG/g" {} +
       shell: bash
 
     - name: Authenticate with registry
@@ -111,5 +111,5 @@ runs:
       with:
         imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
         imageTag: ${{ steps.extract-tag-parts.outputs.tags }}
-        subFolder: ./src/devcontainers/${{ inputs.image }}
+        subFolder: ./src/${{ inputs.image }}
         cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
