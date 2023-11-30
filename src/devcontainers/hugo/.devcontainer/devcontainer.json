@@ -6,7 +6,7 @@
       ]
     }
   },
-  "image": "ghcr.io/iaingalloway/devcontainers/base:latest",
+  "image": "ghcr.io/iaingalloway/devcontainers/base:local",
   "features": {
     "ghcr.io/devcontainers/features/hugo:1": {
       "version": "0.118.2",
