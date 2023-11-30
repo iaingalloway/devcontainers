@@ -67,12 +67,12 @@ Additionally, the devcontainers mount `~/.kube/`, `~/.ssh/`, and `~/.gitconfig`.
 To build the images locally, run the following commands:
 
 ```bash
-devcontainer build --workspace-folder ./src/devcontainers/base --image-name ghcr.io/iaingalloway/devcontainers/base:local
-devcontainer build --workspace-folder ./src/devcontainers/dotnet --image-name ghcr.io/iaingalloway/devcontainers/dotnet:local
-devcontainer build --workspace-folder ./src/devcontainers/go --image-name ghcr.io/iaingalloway/devcontainers/go:local
-devcontainer build --workspace-folder ./src/devcontainers/hugo --image-name ghcr.io/iaingalloway/devcontainers/hugo:local
-devcontainer build --workspace-folder ./src/devcontainers/javascript --image-name ghcr.io/iaingalloway/devcontainers/javascript:local
-devcontainer build --workspace-folder ./src/devcontainers/python --image-name ghcr.io/iaingalloway/devcontainers/python:local
+devcontainer build --workspace-folder ./src/base --image-name ghcr.io/iaingalloway/devcontainers/base:local
+devcontainer build --workspace-folder ./src/dotnet --image-name ghcr.io/iaingalloway/devcontainers/dotnet:local
+devcontainer build --workspace-folder ./src/go --image-name ghcr.io/iaingalloway/devcontainers/go:local
+devcontainer build --workspace-folder ./src/hugo --image-name ghcr.io/iaingalloway/devcontainers/hugo:local
+devcontainer build --workspace-folder ./src/javascript --image-name ghcr.io/iaingalloway/devcontainers/javascript:local
+devcontainer build --workspace-folder ./src/python --image-name ghcr.io/iaingalloway/devcontainers/python:local
 ```
 
 ## Further reading
