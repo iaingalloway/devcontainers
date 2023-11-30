@@ -69,9 +69,6 @@ runs:
       with:
         images: ghcr.io/${{ github.repository }}
         tags: |
-          type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
-          type=ref,event=branch
-          type=ref,event=pr
           type=raw,value=${{ steps.gitversion.outputs.semVer }},enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
           type=raw,value=${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }},enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
           type=raw,value=${{ steps.gitversion.outputs.major }},enable=${{ steps.gitversion.outputs.major != '0' && endsWith(github.ref, github.event.repository.default_branch) }}
@@ -82,6 +79,9 @@ runs:
           type=raw,value=${{ steps.gitversion.outputs.major }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ endsWith(github.ref, github.event.repository.default_branch) && steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}-${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-{{sha}}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
           type=raw,value=${{ steps.gitversion.outputs.semVer }}-${{ steps.gitversion.outputs.branchName }}-${{ steps.gitversion.outputs.commitsSinceVersionSource }}-${{ steps.gitversion.outputs.sha }}-${{ steps.component-name.outputs.name }}${{ steps.component-version.outputs.version }},enable=${{ steps.component-version.outputs.version-found == 'true' }}
+          type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+          type=ref,event=branch
+          type=ref,event=pr
 
     - name: Extract only tag part of full image name
       id: extract-tag-parts
@@ -89,6 +89,13 @@ runs:
         TAGS=$(echo '${{ steps.metadata.outputs.json }}' | jq -r '[.tags[] | split(":") | last] | join(",")')
         echo "$TAGS"
         echo "tags=$TAGS" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Set base image tag
+      id: set-base-image-tag
+      run: |
+        FIRST_TAG=$(echo "${{ steps.extract-tag-parts.outputs.tags }}" | cut -d',' -f1)
+        find "./src/devcontainers/${{ inputs.image }}" -type f -exec sed -i "s/base:local/base:$FIRST_TAG/g" {} +
       shell: bash
 
     - name: Authenticate with registry
