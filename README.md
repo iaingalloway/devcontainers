@@ -24,11 +24,11 @@ This repository contains prebuilt devcontainer images for some of the languages 
 
 The following images are available:
 
-- .NET 8: `ghcr.io/iaingalloway/devcontainers/dotnet:1.1-dotnet8.0.100`
-- Go 1.21: `ghcr.io/iaingalloway/devcontainers/go:1.1-go1.21.0`
-- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.1-hugo0.118.2`
-- Javascript (Node 20.6.1): `ghcr.io/iaingalloway/devcontainers/javascript:1.1-node20.6.1`
-- Python 3.11: `ghcr.io/iaingalloway/devcontainers/python:1.1-python3.11.5`
+- .NET: `ghcr.io/iaingalloway/devcontainers/dotnet:1.2-dotnet8.0.202`
+- Go: `ghcr.io/iaingalloway/devcontainers/go:1.2-go1.22.0`
+- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.2-hugo0.123.8`
+- Javascript (Node): `ghcr.io/iaingalloway/devcontainers/javascript:1.2-node20.11.1`
+- Python: `ghcr.io/iaingalloway/devcontainers/python:1.1-python3.12.2`
 
 ### Configure a project to use a devcontainer
 
@@ -38,7 +38,7 @@ The following images are available:
 ```json
 {
   "name": "My Awesome Project Devcontainer",
-  "image": "ghcr.io/iaingalloway/devcontainers/dotnet:1.0.0-dotnet8.0.100-preview.7.23376.3",
+  "image": "ghcr.io/iaingalloway/devcontainers/dotnet::1.2-dotnet8.0.202",
   "runArgs": [
     "--name",
     "my-awesome-project-devcontainer",
