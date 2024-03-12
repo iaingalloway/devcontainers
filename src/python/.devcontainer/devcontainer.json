@@ -8,7 +8,7 @@
   },
   "image": "ghcr.io/iaingalloway/devcontainers/base:local",
   "features": {
-    "ghcr.io/devcontainers/features/python:1": {
+    "ghcr.io/devcontainers/features/python:1.4.1": {
       "version": "3.11.5"
     }
   }
