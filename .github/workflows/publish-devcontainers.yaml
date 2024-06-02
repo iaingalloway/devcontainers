@@ -73,3 +73,17 @@ jobs:
         with:
           image: python
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  cleanup-workflows:
+      runs-on: ubuntu-latest
+      permissions:
+        actions: write
+        contents: read
+      steps:
+        - name: Delete workflow runs
+          uses: Mattraks/delete-workflow-runs@39f0bbed25d76b34de5594dceab824811479e5de
+          with:
+            token: ${{ github.token }}
+            repository: ${{ github.repository }}
+            retain_days: 30
+            keep_minimum_runs: 5
