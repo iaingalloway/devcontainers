@@ -24,11 +24,11 @@ This repository contains prebuilt devcontainer images for some of the languages 
 
 The following images are available:
 
-- .NET: `ghcr.io/iaingalloway/devcontainers/dotnet:1.2-dotnet8.0.202`
+- .NET: `ghcr.io/iaingalloway/devcontainers/dotnet:1.2-dotnet8.0.300`
 - Go: `ghcr.io/iaingalloway/devcontainers/go:1.2-go1.22.0`
-- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.2-hugo0.123.8`
-- Javascript (Node): `ghcr.io/iaingalloway/devcontainers/javascript:1.2-node20.11.1`
-- Python: `ghcr.io/iaingalloway/devcontainers/python:1.1-python3.12.2`
+- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.2-hugo0.126.2`
+- Javascript (Node): `ghcr.io/iaingalloway/devcontainers/javascript:1.2-node22.2.0`
+- Python: `ghcr.io/iaingalloway/devcontainers/python:1.1-python3.12.3`
 
 ### Configure a project to use a devcontainer
 
@@ -38,7 +38,7 @@ The following images are available:
 ```json
 {
   "name": "My Awesome Project Devcontainer",
-  "image": "ghcr.io/iaingalloway/devcontainers/dotnet::1.2-dotnet8.0.202",
+  "image": "ghcr.io/iaingalloway/devcontainers/dotnet::1.2-dotnet8.0.300",
   "runArgs": [
     "--name",
     "my-awesome-project-devcontainer",
@@ -57,7 +57,6 @@ The devcontainers in this repo have the following features:
 - [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/)
 - [Helm](https://helm.sh/)
 - [Starship](https://starship.rs/) prompt
-- [Kind](https://kind.sigs.k8s.io/) to create Kubernetes clusters on the host's docker daemon for local development
 - [Chezmoi](https://www.chezmoi.io/) to import and manage dotfiles
 
 Additionally, the devcontainers mount `~/.kube/`, `~/.ssh/`, and `~/.gitconfig`. If '~/.gitconfig' contains a key for the user's github username, this is used to configure Chezmoi.
