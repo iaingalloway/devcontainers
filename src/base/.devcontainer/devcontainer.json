@@ -23,9 +23,6 @@
     "ghcr.io/devcontainers-contrib/features/starship:1.0.9": {
       "version": "1.19.0"
     },
-    "ghcr.io/mpriscella/features/kind:1.0.1": {
-      "version": "0.23.0"
-    },
     "ghcr.io/rio/features/chezmoi:1.1.0": {}
   },
   "mounts": [
