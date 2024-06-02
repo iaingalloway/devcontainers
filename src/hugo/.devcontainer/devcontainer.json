@@ -9,7 +9,7 @@
   "image": "ghcr.io/iaingalloway/devcontainers/base:local",
   "features": {
     "ghcr.io/devcontainers/features/hugo:1.1.2": {
-      "version": "0.123.8",
+      "version": "0.126.2",
       "extended": "true"
     }
   }
