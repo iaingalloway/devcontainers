@@ -20,7 +20,7 @@
       "helm": "3.19.3",
       "minikube": "none"
     },
-    "ghcr.io/devcontainers-contrib/features/starship:1.0.10": {
+    "ghcr.io/devcontainers-extra/features/starship:1.0.10": {
       "version": "1.24.1"
     },
     "ghcr.io/rio/features/chezmoi:1.1.0": {}
