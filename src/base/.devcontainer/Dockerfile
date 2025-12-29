@@ -1,3 +1,3 @@
-FROM mcr.microsoft.com/devcontainers/base:1.0.22-jammy
+FROM mcr.microsoft.com/devcontainers/base:2.1.3-noble
 
 USER vscode
