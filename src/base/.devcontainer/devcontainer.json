@@ -14,7 +14,7 @@
   },
   "dockerFile": "Dockerfile",
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.5.0": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.6.5": {},
     "ghcr.io/devcontainers/features/kubectl-helm-minikube:1.1.9": {
       "version": "1.29.2",
       "helm": "3.12.0",
