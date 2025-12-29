@@ -8,7 +8,7 @@
   },
   "image": "ghcr.io/iaingalloway/devcontainers/base:local",
   "features": {
-    "ghcr.io/devcontainers/features/node:1.4.1": {
+    "ghcr.io/devcontainers/features/node:1.6.3": {
       "version": "22.2.0"
     }
   }
