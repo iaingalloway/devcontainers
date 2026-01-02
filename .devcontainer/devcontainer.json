@@ -11,7 +11,9 @@
   },
   "dockerFile": "Dockerfile",
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.6.5": {}
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.6.5": {
+      "moby": "false"
+    }
   },
   "runArgs": [
     "--name",
