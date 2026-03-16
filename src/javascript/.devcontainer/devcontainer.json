@@ -9,7 +9,7 @@
   "image": "ghcr.io/iaingalloway/devcontainers/base:local",
   "features": {
     "ghcr.io/devcontainers/features/node:1.7.1": {
-      "version": "25.2.1"
+      "version": "25.8.1"
     }
   }
 }
