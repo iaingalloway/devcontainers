@@ -38,7 +38,7 @@ The following images are available:
 ```json
 {
   "name": "My Awesome Project Devcontainer",
-  "image": "ghcr.io/iaingalloway/devcontainers/dotnet::1.4-dotnet10.0.101",
+  "image": "ghcr.io/iaingalloway/devcontainers/dotnet:1.4-dotnet10.0.101",
   "runArgs": [
     "--name",
     "my-awesome-project-devcontainer",
