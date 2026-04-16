@@ -91,11 +91,11 @@ runs:
         echo "tags=$TAGS" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: Set base image tag
+    - name: Determine base image tag
       id: set-base-image-tag
       run: |
         FIRST_TAG=$(echo "${{ steps.extract-tag-parts.outputs.tags }}" | cut -d',' -f1)
-        find "./src/${{ inputs.image }}" -type f -exec sed -i "s/base:local/base:$FIRST_TAG/g" {} +
+        echo "base-image-tag=$FIRST_TAG" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Authenticate with registry
@@ -108,6 +108,8 @@ runs:
 
     - name: Build devcontainer
       uses: devcontainers/ci@v0.3
+      env:
+        BASE_IMAGE_TAG: ${{ steps.set-base-image-tag.outputs.base-image-tag }}
       with:
         imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
         imageTag: ${{ steps.extract-tag-parts.outputs.tags }}

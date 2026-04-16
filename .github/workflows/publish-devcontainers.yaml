@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Publish base devcontainer
-        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        uses: ./.github/actions/publish-devcontainer
         with:
           image: base
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -24,7 +24,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        uses: ./.github/actions/publish-devcontainer
         with:
           image: dotnet
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -35,7 +35,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish go devcontainer
-        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        uses: ./.github/actions/publish-devcontainer
         with:
           image: go
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        uses: ./.github/actions/publish-devcontainer
         with:
           image: hugo
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -57,7 +57,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        uses: ./.github/actions/publish-devcontainer
         with:
           image: javascript
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -69,7 +69,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@main
+        uses: ./.github/actions/publish-devcontainer
         with:
           image: python
           github-token: ${{ secrets.GITHUB_TOKEN }}
