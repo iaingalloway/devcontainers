@@ -101,92 +101,23 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  publish-dotnet:
+  publish-images:
     runs-on: ubuntu-latest
     needs:
       - prepare-tags
       - publish-base
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [dotnet, go, hugo, javascript, python]
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Publish dotnet devcontainer
+      - name: Publish ${{ matrix.image }} devcontainer
         uses: ./.github/actions/publish-devcontainer
         with:
-          image: dotnet
-          image-tags: ${{ needs.prepare-tags.outputs.tags }}
-          base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
-          push-image: ${{ github.event_name != 'pull_request' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  publish-go:
-    runs-on: ubuntu-latest
-    needs:
-      - prepare-tags
-      - publish-base
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-
-      - name: Publish go devcontainer
-        uses: ./.github/actions/publish-devcontainer
-        with:
-          image: go
-          image-tags: ${{ needs.prepare-tags.outputs.tags }}
-          base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
-          push-image: ${{ github.event_name != 'pull_request' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  publish-hugo:
-    runs-on: ubuntu-latest
-    needs:
-      - prepare-tags
-      - publish-base
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-
-      - name: Publish hugo devcontainer
-        uses: ./.github/actions/publish-devcontainer
-        with:
-          image: hugo
-          image-tags: ${{ needs.prepare-tags.outputs.tags }}
-          base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
-          push-image: ${{ github.event_name != 'pull_request' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  publish-javascript:
-    runs-on: ubuntu-latest
-    needs:
-      - prepare-tags
-      - publish-base
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-
-      - name: Publish javascript devcontainer
-        uses: ./.github/actions/publish-devcontainer
-        with:
-          image: javascript
-          image-tags: ${{ needs.prepare-tags.outputs.tags }}
-          base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
-          push-image: ${{ github.event_name != 'pull_request' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          component-name: node
-
-  publish-python:
-    runs-on: ubuntu-latest
-    needs:
-      - prepare-tags
-      - publish-base
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-
-      - name: Publish python devcontainer
-        uses: ./.github/actions/publish-devcontainer
-        with:
-          image: python
+          image: ${{ matrix.image }}
           image-tags: ${{ needs.prepare-tags.outputs.tags }}
           base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
           push-image: ${{ github.event_name != 'pull_request' }}
