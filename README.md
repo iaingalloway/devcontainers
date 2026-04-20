@@ -26,9 +26,9 @@ The following images are available:
 
 - .NET: `ghcr.io/iaingalloway/devcontainers/dotnet:1.5-dotnet10.0.201`
 - Go: `ghcr.io/iaingalloway/devcontainers/go:1.5-go1.26.0`
-- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.5-hugo0.153.2`
+- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.5-hugo0.153.0`
 - Javascript (Node): `ghcr.io/iaingalloway/devcontainers/javascript:1.5-node25.8.1`
-- Python: `ghcr.io/iaingalloway/devcontainers/python:1.4-python3.14.3`
+- Python: `ghcr.io/iaingalloway/devcontainers/python:1.5-python3.14.3`
 
 ### Configure a project to use a devcontainer
 
