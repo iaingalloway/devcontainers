@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Publish base devcontainer
-        uses: ./.github/actions/publish-devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@121fe35714d04b5359994afd4aa77512b2825d6f
         with:
           image: base
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -24,7 +24,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: ./.github/actions/publish-devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@121fe35714d04b5359994afd4aa77512b2825d6f
         with:
           image: dotnet
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -35,7 +35,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish go devcontainer
-        uses: ./.github/actions/publish-devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@121fe35714d04b5359994afd4aa77512b2825d6f
         with:
           image: go
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: ./.github/actions/publish-devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@121fe35714d04b5359994afd4aa77512b2825d6f
         with:
           image: hugo
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -57,7 +57,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: ./.github/actions/publish-devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@121fe35714d04b5359994afd4aa77512b2825d6f
         with:
           image: javascript
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -69,7 +69,7 @@ jobs:
       - publish-base
     steps:
       - name: Publish dotnet devcontainer
-        uses: ./.github/actions/publish-devcontainer
+        uses: iaingalloway/devcontainers/.github/actions/publish-devcontainer@121fe35714d04b5359994afd4aa77512b2825d6f
         with:
           image: python
           github-token: ${{ secrets.GITHUB_TOKEN }}
