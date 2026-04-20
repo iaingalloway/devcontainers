@@ -18,16 +18,9 @@ inputs:
     description: 'Docker registry'
     required: false
     default: ghcr.io
-  component-name:
-    description: Name of the component
-    required: false
   github-token:
     description: GitHub token
     required: true
-  enable-component-version:
-    description: Enable component version
-    required: false
-    default: 'true'
 
 runs:
   using: composite
