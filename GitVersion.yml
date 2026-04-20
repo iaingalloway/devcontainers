@@ -1,1 +1,8 @@
-mode: Mainline
+workflow: GitHubFlow/v1
+mode: ContinuousDeployment
+strategies:
+  - ConfiguredNextVersion
+  - Mainline
+branches:
+  main:
+    increment: Patch
