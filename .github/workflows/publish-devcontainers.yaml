@@ -75,6 +75,23 @@ jobs:
           base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Save base image for PR child jobs
+        if: github.event_name == 'pull_request'
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
+          docker image inspect "$IMAGE" >/dev/null 2>&1
+          docker save "$IMAGE" | gzip > base-image.tar.gz
+        shell: bash
+
+      - name: Upload base image artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: base-image
+          path: base-image.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+
   publish-dotnet:
     runs-on: ubuntu-latest
     needs:
@@ -83,6 +100,20 @@ jobs:
     steps:
       - name: Checkout (GitHub)
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+      - name: Download base image artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/download-artifact@v4
+        with:
+          name: base-image
+
+      - name: Load base image artifact
+        if: github.event_name == 'pull_request'
+        run: |
+          gunzip -c base-image.tar.gz | docker load
+          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
+          docker image inspect "$IMAGE" >/dev/null 2>&1
+        shell: bash
 
       - name: Publish dotnet devcontainer
         uses: ./.github/actions/publish-devcontainer
@@ -101,6 +132,20 @@ jobs:
       - name: Checkout (GitHub)
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
+      - name: Download base image artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/download-artifact@v4
+        with:
+          name: base-image
+
+      - name: Load base image artifact
+        if: github.event_name == 'pull_request'
+        run: |
+          gunzip -c base-image.tar.gz | docker load
+          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
+          docker image inspect "$IMAGE" >/dev/null 2>&1
+        shell: bash
+
       - name: Publish go devcontainer
         uses: ./.github/actions/publish-devcontainer
         with:
@@ -117,6 +162,20 @@ jobs:
     steps:
       - name: Checkout (GitHub)
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+      - name: Download base image artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/download-artifact@v4
+        with:
+          name: base-image
+
+      - name: Load base image artifact
+        if: github.event_name == 'pull_request'
+        run: |
+          gunzip -c base-image.tar.gz | docker load
+          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
+          docker image inspect "$IMAGE" >/dev/null 2>&1
+        shell: bash
 
       - name: Publish dotnet devcontainer
         uses: ./.github/actions/publish-devcontainer
@@ -135,6 +194,20 @@ jobs:
       - name: Checkout (GitHub)
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
+      - name: Download base image artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/download-artifact@v4
+        with:
+          name: base-image
+
+      - name: Load base image artifact
+        if: github.event_name == 'pull_request'
+        run: |
+          gunzip -c base-image.tar.gz | docker load
+          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
+          docker image inspect "$IMAGE" >/dev/null 2>&1
+        shell: bash
+
       - name: Publish dotnet devcontainer
         uses: ./.github/actions/publish-devcontainer
         with:
@@ -152,6 +225,20 @@ jobs:
     steps:
       - name: Checkout (GitHub)
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+      - name: Download base image artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/download-artifact@v4
+        with:
+          name: base-image
+
+      - name: Load base image artifact
+        if: github.event_name == 'pull_request'
+        run: |
+          gunzip -c base-image.tar.gz | docker load
+          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
+          docker image inspect "$IMAGE" >/dev/null 2>&1
+        shell: bash
 
       - name: Publish dotnet devcontainer
         uses: ./.github/actions/publish-devcontainer
