@@ -31,7 +31,7 @@ jobs:
 
       - name: Determine image tags using Docker metadata action
         id: metadata
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
@@ -76,7 +76,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build base devcontainer
-        uses: devcontainers/ci@v0.3
+        uses: devcontainers/ci@b63b30de439b47a52267f241112c5b453b673db5
         with:
           imageName: ghcr.io/${{ github.repository }}/base
           imageTag: ${{ needs.prepare-tags.outputs.tags }}
@@ -94,7 +94,7 @@ jobs:
 
       - name: Upload base image artifact
         if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: base
           path: base.tar.gz
