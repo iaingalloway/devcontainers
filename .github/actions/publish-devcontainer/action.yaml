@@ -10,6 +10,10 @@ inputs:
   base-image-tag:
     description: Base image tag to use for child image builds
     required: true
+  push-image:
+    description: Push the built image to the registry (when false, loads base image from artifact instead)
+    required: false
+    default: 'false'
   registry:
     description: 'Docker registry'
     required: false
@@ -28,18 +32,28 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Checkout (GitHub)
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      with:
-        fetch-depth: 0
 
     - name: Authenticate with registry
-      if: github.event_name != 'pull_request'
+      if: inputs.push-image == 'true'
       uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
       with:
         registry: ${{ inputs.registry }}
         username: ${{ github.actor }}
         password: ${{ inputs.github-token }}
+
+    - name: Download base image artifact
+      if: inputs.push-image != 'true'
+      uses: actions/download-artifact@v4
+      with:
+        name: base
+
+    - name: Load base image artifact
+      if: inputs.push-image != 'true'
+      run: |
+        gunzip -c base.tar.gz | docker load
+        IMAGE="ghcr.io/${{ github.repository }}/base:${{ inputs.base-image-tag }}"
+        docker image inspect "$IMAGE" >/dev/null 2>&1
+      shell: bash
 
     - name: Build devcontainer
       uses: devcontainers/ci@v0.3
@@ -48,5 +62,6 @@ runs:
       with:
         imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
         imageTag: ${{ inputs.image-tags }}
+        push: ${{ inputs.push-image == 'true' && 'always' || 'never' }}
         subFolder: ./src/${{ inputs.image }}
         cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}

@@ -15,8 +15,8 @@ jobs:
       tags: ${{ steps.extract-tag-parts.outputs.tags }}
       base-image-tag: ${{ steps.set-base-image-tag.outputs.base-image-tag }}
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           fetch-depth: 0
 
@@ -64,31 +64,40 @@ jobs:
     needs:
       - prepare-tags
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Publish base devcontainer
-        uses: ./.github/actions/publish-devcontainer
+      - name: Authenticate with registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
         with:
-          image: base
-          image-tags: ${{ needs.prepare-tags.outputs.tags }}
-          base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Save base image for PR child jobs
+      - name: Build base devcontainer
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ghcr.io/${{ github.repository }}/base
+          imageTag: ${{ needs.prepare-tags.outputs.tags }}
+          push: ${{ github.event_name != 'pull_request' && 'always' || 'never' }}
+          subFolder: ./src/base
+          cacheFrom: ghcr.io/${{ github.repository }}/base
+
+      - name: Save base image for child jobs
         if: github.event_name == 'pull_request'
         run: |
           IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
           docker image inspect "$IMAGE" >/dev/null 2>&1
-          docker save "$IMAGE" | gzip > base-image.tar.gz
+          docker save "$IMAGE" | gzip > base.tar.gz
         shell: bash
 
       - name: Upload base image artifact
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: base-image
-          path: base-image.tar.gz
+          name: base
+          path: base.tar.gz
           if-no-files-found: error
           retention-days: 1
 
@@ -98,22 +107,8 @@ jobs:
       - prepare-tags
       - publish-base
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-
-      - name: Download base image artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/download-artifact@v4
-        with:
-          name: base-image
-
-      - name: Load base image artifact
-        if: github.event_name == 'pull_request'
-        run: |
-          gunzip -c base-image.tar.gz | docker load
-          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
-          docker image inspect "$IMAGE" >/dev/null 2>&1
-        shell: bash
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Publish dotnet devcontainer
         uses: ./.github/actions/publish-devcontainer
@@ -121,6 +116,7 @@ jobs:
           image: dotnet
           image-tags: ${{ needs.prepare-tags.outputs.tags }}
           base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
+          push-image: ${{ github.event_name != 'pull_request' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-go:
@@ -129,22 +125,8 @@ jobs:
       - prepare-tags
       - publish-base
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-
-      - name: Download base image artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/download-artifact@v4
-        with:
-          name: base-image
-
-      - name: Load base image artifact
-        if: github.event_name == 'pull_request'
-        run: |
-          gunzip -c base-image.tar.gz | docker load
-          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
-          docker image inspect "$IMAGE" >/dev/null 2>&1
-        shell: bash
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Publish go devcontainer
         uses: ./.github/actions/publish-devcontainer
@@ -152,6 +134,7 @@ jobs:
           image: go
           image-tags: ${{ needs.prepare-tags.outputs.tags }}
           base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
+          push-image: ${{ github.event_name != 'pull_request' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-hugo:
@@ -160,29 +143,16 @@ jobs:
       - prepare-tags
       - publish-base
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Download base image artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/download-artifact@v4
-        with:
-          name: base-image
-
-      - name: Load base image artifact
-        if: github.event_name == 'pull_request'
-        run: |
-          gunzip -c base-image.tar.gz | docker load
-          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
-          docker image inspect "$IMAGE" >/dev/null 2>&1
-        shell: bash
-
-      - name: Publish dotnet devcontainer
+      - name: Publish hugo devcontainer
         uses: ./.github/actions/publish-devcontainer
         with:
           image: hugo
           image-tags: ${{ needs.prepare-tags.outputs.tags }}
           base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
+          push-image: ${{ github.event_name != 'pull_request' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-javascript:
@@ -191,29 +161,16 @@ jobs:
       - prepare-tags
       - publish-base
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Download base image artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/download-artifact@v4
-        with:
-          name: base-image
-
-      - name: Load base image artifact
-        if: github.event_name == 'pull_request'
-        run: |
-          gunzip -c base-image.tar.gz | docker load
-          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
-          docker image inspect "$IMAGE" >/dev/null 2>&1
-        shell: bash
-
-      - name: Publish dotnet devcontainer
+      - name: Publish javascript devcontainer
         uses: ./.github/actions/publish-devcontainer
         with:
           image: javascript
           image-tags: ${{ needs.prepare-tags.outputs.tags }}
           base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
+          push-image: ${{ github.event_name != 'pull_request' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           component-name: node
 
@@ -223,29 +180,16 @@ jobs:
       - prepare-tags
       - publish-base
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Download base image artifact
-        if: github.event_name == 'pull_request'
-        uses: actions/download-artifact@v4
-        with:
-          name: base-image
-
-      - name: Load base image artifact
-        if: github.event_name == 'pull_request'
-        run: |
-          gunzip -c base-image.tar.gz | docker load
-          IMAGE="ghcr.io/${{ github.repository }}/base:${{ needs.prepare-tags.outputs.base-image-tag }}"
-          docker image inspect "$IMAGE" >/dev/null 2>&1
-        shell: bash
-
-      - name: Publish dotnet devcontainer
+      - name: Publish python devcontainer
         uses: ./.github/actions/publish-devcontainer
         with:
           image: python
           image-tags: ${{ needs.prepare-tags.outputs.tags }}
           base-image-tag: ${{ needs.prepare-tags.outputs.base-image-tag }}
+          push-image: ${{ github.event_name != 'pull_request' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   cleanup-workflows:
