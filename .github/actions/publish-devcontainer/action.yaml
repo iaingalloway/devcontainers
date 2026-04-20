@@ -48,13 +48,50 @@ runs:
         docker image inspect "$IMAGE" >/dev/null 2>&1
       shell: bash
 
+    - name: Extract component version from devcontainer.json
+      id: component-version
+      run: |
+        DEVCONTAINER_FILE=./src/${{ inputs.image }}/.devcontainer/devcontainer.json
+        if [[ -f "$DEVCONTAINER_FILE" ]]; then
+          VERSION=$(jq -r '.features | to_entries[0].value.version' "$DEVCONTAINER_FILE")
+          if [[ "$VERSION" != "null" && -n "$VERSION" ]]; then
+            echo "version=${VERSION}" >> $GITHUB_OUTPUT
+            echo "version-found=true" >> $GITHUB_OUTPUT
+          else
+            echo "No version key found in $DEVCONTAINER_FILE."
+          fi
+        else
+          echo "$DEVCONTAINER_FILE does not exist."
+        fi
+      shell: bash
+
+    - name: Add component-version tags
+      id: augment-tags
+      run: |
+        TAGS="${{ inputs.image-tags }}"
+
+        if [[ "${{ steps.component-version.outputs.version-found }}" == "true" ]]; then
+          SUFFIX="${{ inputs.image }}${{ steps.component-version.outputs.version }}"
+          IFS=',' read -ra TAG_ARRAY <<< "$TAGS"
+          for TAG in "${TAG_ARRAY[@]}"; do
+            if [[ "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || \
+               [[ "$TAG" =~ ^[0-9]+\.[0-9]+$ ]] || \
+               [[ "$TAG" =~ ^[0-9]+$ ]]; then
+              TAGS="${TAGS},${TAG}-${SUFFIX}"
+            fi
+          done
+        fi
+
+        echo "tags=$TAGS" >> $GITHUB_OUTPUT
+      shell: bash
+
     - name: Build devcontainer image
       uses: devcontainers/ci@b63b30de439b47a52267f241112c5b453b673db5
       env:
         BASE_IMAGE_TAG: ${{ inputs.base-image-tag }}
       with:
         imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
-        imageTag: ${{ inputs.image-tags }}
+        imageTag: ${{ steps.augment-tags.outputs.tags }}
         push: ${{ inputs.push-image == 'true' && 'always' || 'never' }}
         subFolder: ./src/${{ inputs.image }}
         cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
