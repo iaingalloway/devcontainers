@@ -1,4 +1,4 @@
-name: Publish devcontainers
+name: Build devcontainers
 
 on:
   pull_request:
@@ -61,8 +61,8 @@ jobs:
           echo "base-image-tag=$FIRST_TAG" >> $GITHUB_OUTPUT
         shell: bash
 
-  publish-base:
-    name: Publish base
+  build-base:
+    name: Build base
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -73,22 +73,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Log in to registry
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
+      - name: Build base devcontainer
+        uses: ./.github/actions/build-devcontainer
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build base devcontainer image
-        uses: devcontainers/ci@b63b30de439b47a52267f241112c5b453b673db5
-        with:
-          imageName: ghcr.io/${{ github.repository }}/base
-          imageTag: ${{ needs.prepare-tags.outputs.tags }}
-          push: ${{ github.event_name != 'pull_request' && 'always' || 'never' }}
-          subFolder: ./src/base
-          cacheFrom: ghcr.io/${{ github.repository }}/base
+          image: base
+          image-tags: ${{ needs.prepare-tags.outputs.tags }}
+          push-image: ${{ github.event_name != 'pull_request' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Export base image for dependent jobs
         if: github.event_name == 'pull_request'
@@ -107,15 +98,15 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  publish-images:
-    name: Publish ${{ matrix.image }}
+  build-child-images:
+    name: Build ${{ matrix.image }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     needs:
       - prepare-tags
-      - publish-base
+      - build-base
     strategy:
       fail-fast: false
       matrix:
@@ -124,8 +115,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Publish ${{ matrix.image }} devcontainer
-        uses: ./.github/actions/publish-devcontainer
+      - name: Build ${{ matrix.image }} devcontainer
+        uses: ./.github/actions/build-child-devcontainer
         with:
           image: ${{ matrix.image }}
           image-tags: ${{ needs.prepare-tags.outputs.tags }}

@@ -1,5 +1,5 @@
-name: Publish devcontainer
-description: Build and publish a devcontainer
+name: Build child devcontainer
+description: Build and optionally push a child devcontainer image
 inputs:
   image:
     description: Name of the image to build
@@ -25,14 +25,6 @@ inputs:
 runs:
   using: composite
   steps:
-
-    - name: Log in to registry
-      if: inputs.push-image == 'true'
-      uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
-      with:
-        registry: ${{ inputs.registry }}
-        username: ${{ github.actor }}
-        password: ${{ inputs.github-token }}
 
     - name: Download base image artifact
       if: inputs.push-image != 'true'
@@ -85,13 +77,12 @@ runs:
         echo "tags=$TAGS" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: Build devcontainer image
-      uses: devcontainers/ci@b63b30de439b47a52267f241112c5b453b673db5
-      env:
-        BASE_IMAGE_TAG: ${{ inputs.base-image-tag }}
+    - name: Build image
+      uses: ./.github/actions/build-devcontainer
       with:
-        imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
-        imageTag: ${{ steps.augment-tags.outputs.tags }}
-        push: ${{ inputs.push-image == 'true' && 'always' || 'never' }}
-        subFolder: ./src/${{ inputs.image }}
-        cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
+        image: ${{ inputs.image }}
+        image-tags: ${{ steps.augment-tags.outputs.tags }}
+        base-image-tag: ${{ inputs.base-image-tag }}
+        push-image: ${{ inputs.push-image }}
+        registry: ${{ inputs.registry }}
+        github-token: ${{ inputs.github-token }}

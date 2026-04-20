@@ -1,0 +1,47 @@
+name: Build devcontainer
+description: Build and optionally push a devcontainer image
+inputs:
+  image:
+    description: Name of the image to build
+    required: true
+  image-tags:
+    description: Comma-separated tags to apply to the image
+    required: true
+  push-image:
+    description: Push the built image to the registry
+    required: false
+    default: 'false'
+  base-image-tag:
+    description: Base image tag (set as BASE_IMAGE_TAG env var during build)
+    required: false
+    default: ''
+  registry:
+    description: 'Docker registry'
+    required: false
+    default: ghcr.io
+  github-token:
+    description: GitHub token
+    required: true
+
+runs:
+  using: composite
+  steps:
+
+    - name: Log in to registry
+      if: inputs.push-image == 'true'
+      uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ github.actor }}
+        password: ${{ inputs.github-token }}
+
+    - name: Build devcontainer image
+      uses: devcontainers/ci@b63b30de439b47a52267f241112c5b453b673db5
+      env:
+        BASE_IMAGE_TAG: ${{ inputs.base-image-tag }}
+      with:
+        imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
+        imageTag: ${{ inputs.image-tags }}
+        push: ${{ inputs.push-image == 'true' && 'always' || 'never' }}
+        subFolder: ./src/${{ inputs.image }}
+        cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
