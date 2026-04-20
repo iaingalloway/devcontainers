@@ -35,7 +35,7 @@ runs:
 
     - name: Authenticate with registry
       if: inputs.push-image == 'true'
-      uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+      uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
       with:
         registry: ${{ inputs.registry }}
         username: ${{ github.actor }}
