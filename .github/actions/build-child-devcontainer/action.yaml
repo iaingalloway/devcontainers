@@ -69,7 +69,7 @@ runs:
             if [[ "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || \
                [[ "$TAG" =~ ^[0-9]+\.[0-9]+$ ]] || \
                [[ "$TAG" =~ ^[0-9]+$ ]]; then
-              TAGS="${TAGS},${TAG}-${SUFFIX}"
+              TAGS="${TAG}-${SUFFIX},$TAGS"
             fi
           done
         fi
@@ -81,7 +81,7 @@ runs:
       uses: ./.github/actions/build-devcontainer
       with:
         image: ${{ inputs.image }}
-        image-tags: ${{ steps.augment-tags.outputs.tags }}
+        resolved-tags: ${{ steps.augment-tags.outputs.tags }}
         base-image-tag: ${{ inputs.base-image-tag }}
         push-image: ${{ inputs.push-image }}
         registry: ${{ inputs.registry }}

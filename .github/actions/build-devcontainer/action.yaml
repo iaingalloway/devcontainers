@@ -4,7 +4,7 @@ inputs:
   image:
     description: Name of the image to build
     required: true
-  image-tags:
+  resolved-tags:
     description: Comma-separated tags to apply to the image
     required: true
   push-image:
@@ -27,6 +27,13 @@ runs:
   using: composite
   steps:
 
+    - name: Persist resolved tags
+      run: |
+        # Workaround: nested composite post can lose direct inputs/step outputs;
+        # persist tags in job env so devcontainers/ci post can read them reliably.
+        echo "BUILDCONTAINER_RESOLVED_TAGS=${{ inputs.resolved-tags }}" >> $GITHUB_ENV
+      shell: bash
+
     - name: Log in to registry
       if: inputs.push-image == 'true'
       uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
@@ -41,7 +48,7 @@ runs:
         BASE_IMAGE_TAG: ${{ inputs.base-image-tag }}
       with:
         imageName: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}
-        imageTag: ${{ inputs.image-tags }}
+        imageTag: ${{ env.BUILDCONTAINER_RESOLVED_TAGS }}
         push: ${{ inputs.push-image == 'true' && 'always' || 'never' }}
         subFolder: ./src/${{ inputs.image }}
         cacheFrom: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.image }}

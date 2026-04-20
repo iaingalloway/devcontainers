@@ -79,7 +79,7 @@ jobs:
         uses: ./.github/actions/build-devcontainer
         with:
           image: base
-          image-tags: ${{ needs.prepare-tags.outputs.tags }}
+          resolved-tags: ${{ needs.prepare-tags.outputs.tags }}
           push-image: ${{ github.event_name != 'pull_request' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
