@@ -11,6 +11,8 @@ on:
 jobs:
   prepare-tags:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       tags: ${{ steps.extract-tag-parts.outputs.tags }}
       base-image-tag: ${{ steps.set-base-image-tag.outputs.base-image-tag }}
@@ -60,6 +62,9 @@ jobs:
 
   publish-base:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs:
       - prepare-tags
     steps:
@@ -102,6 +107,9 @@ jobs:
 
   publish-images:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs:
       - prepare-tags
       - publish-base
