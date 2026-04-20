@@ -48,8 +48,10 @@ jobs:
 
       - name: Strip image name from tags
         id: extract-tag-parts
+        env:
+          METADATA_JSON: ${{ steps.metadata.outputs.json }}
         run: |
-          TAGS=$(echo '${{ steps.metadata.outputs.json }}' | jq -r '[.tags[] | split(":") | last] | join(",")')
+          TAGS=$(echo "$METADATA_JSON" | jq -r '[.tags[] | split(":") | last] | join(",")')
           echo "$TAGS"
           echo "tags=$TAGS" >> $GITHUB_OUTPUT
         shell: bash
