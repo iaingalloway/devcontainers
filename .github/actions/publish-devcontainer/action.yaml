@@ -26,7 +26,7 @@ runs:
   using: composite
   steps:
 
-    - name: Authenticate with registry
+    - name: Log in to registry
       if: inputs.push-image == 'true'
       uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
       with:
@@ -40,7 +40,7 @@ runs:
       with:
         name: base
 
-    - name: Load base image artifact
+    - name: Load base image from artifact
       if: inputs.push-image != 'true'
       run: |
         gunzip -c base.tar.gz | docker load
@@ -48,7 +48,7 @@ runs:
         docker image inspect "$IMAGE" >/dev/null 2>&1
       shell: bash
 
-    - name: Build devcontainer
+    - name: Build devcontainer image
       uses: devcontainers/ci@b63b30de439b47a52267f241112c5b453b673db5
       env:
         BASE_IMAGE_TAG: ${{ inputs.base-image-tag }}
