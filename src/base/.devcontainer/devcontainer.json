@@ -22,6 +22,9 @@
       "helm": "4.1.4",
       "minikube": "none"
     },
+    "ghcr.io/devcontainer-community/devcontainer-features/jq:1.0.2": {
+      "version": "1.8.1"
+    },
     "ghcr.io/devcontainers-extra/features/starship:1.0.10": {
       "version": "1.25.1"
     },
