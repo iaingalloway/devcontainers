@@ -1,3 +1,3 @@
-FROM mcr.microsoft.com/devcontainers/base:2.1.7-trixie
+FROM mcr.microsoft.com/devcontainers/base:2.1.8-trixie
 
 USER vscode
