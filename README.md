@@ -24,11 +24,11 @@ This repository contains prebuilt devcontainer images for some of the languages 
 
 The following images are available:
 
-- .NET: `ghcr.io/iaingalloway/devcontainers/dotnet:1.5-dotnet10.0.201`
+- .NET: `ghcr.io/iaingalloway/devcontainers/dotnet:1.5-dotnet10.0.203`
 - Go: `ghcr.io/iaingalloway/devcontainers/go:1.5-go1.26.0`
-- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.5-hugo0.153.0`
-- Javascript (Node): `ghcr.io/iaingalloway/devcontainers/javascript:1.5-node25.8.1`
-- Python: `ghcr.io/iaingalloway/devcontainers/python:1.5-python3.14.3`
+- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.5-hugo0.161.1`
+- Javascript (Node): `ghcr.io/iaingalloway/devcontainers/javascript:1.5-node26.1.0`
+- Python: `ghcr.io/iaingalloway/devcontainers/python:1.5-python3.14.5`
 
 ### Configure a project to use a devcontainer
 
@@ -56,8 +56,10 @@ The devcontainers in this repo have the following features:
 - [Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/) using the [Docker outside of Docker](https://github.com/devcontainers/features/tree/main/src/docker-outside-of-docker) pattern, allowing the devcontainer to interact with the host's docker daemon
 - [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/)
 - [Helm](https://helm.sh/)
+- [jq](https://jqlang.org/) for working with JSON on the command line
 - [Starship](https://starship.rs/) prompt
 - [Chezmoi](https://www.chezmoi.io/) to import and manage dotfiles
+- [just](https://github.com/casey/just) for running tasks
 
 Additionally, the devcontainers mount `~/.kube/`, `~/.ssh/`, and `~/.gitconfig`. If '~/.gitconfig' contains a key for the user's github username, this is used to configure Chezmoi.
 
