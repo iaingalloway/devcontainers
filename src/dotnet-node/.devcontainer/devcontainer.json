@@ -1,0 +1,23 @@
+{
+  "name": "devcontainer-dotnet-node",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit"
+      ],
+      "settings": {
+        "dotnet.preferRuntimeFromSDK": true
+      }
+    }
+  },
+  "image": "ghcr.io/iaingalloway/devcontainers/base:${localEnv:BASE_IMAGE_TAG:local}",
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2.5.0": {
+      "version": "10.0.400"
+    },
+    "ghcr.io/devcontainers/features/node:2.1.0": {
+      "version": "26.7.0"
+    }
+  }
+}

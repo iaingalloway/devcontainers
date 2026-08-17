@@ -25,6 +25,7 @@ This repository contains prebuilt devcontainer images for some of the languages 
 The following images are available:
 
 - .NET: [ghcr.io/iaingalloway/devcontainers/dotnet](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fdotnet)
+- .NET and Node: [ghcr.io/iaingalloway/devcontainers/dotnet-node](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fdotnet-node)
 - Go: [ghcr.io/iaingalloway/devcontainers/go](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fgo)
 - Hugo: [ghcr.io/iaingalloway/devcontainers/hugo](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fhugo)
 - Javascript (Node): [ghcr.io/iaingalloway/devcontainers/javascript](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fjavascript)
@@ -70,6 +71,7 @@ To build the images locally, run the following commands:
 ```bash
 devcontainer build --workspace-folder ./src/base --image-name ghcr.io/iaingalloway/devcontainers/base:local
 devcontainer build --workspace-folder ./src/dotnet --image-name ghcr.io/iaingalloway/devcontainers/dotnet:local
+devcontainer build --workspace-folder ./src/dotnet-node --image-name ghcr.io/iaingalloway/devcontainers/dotnet-node:local
 devcontainer build --workspace-folder ./src/go --image-name ghcr.io/iaingalloway/devcontainers/go:local
 devcontainer build --workspace-folder ./src/hugo --image-name ghcr.io/iaingalloway/devcontainers/hugo:local
 devcontainer build --workspace-folder ./src/javascript --image-name ghcr.io/iaingalloway/devcontainers/javascript:local
