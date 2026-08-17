@@ -12,7 +12,7 @@
   },
   "dockerFile": "Dockerfile",
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.9.1": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.10.0": {
       "moby": "false"
     }
   },
