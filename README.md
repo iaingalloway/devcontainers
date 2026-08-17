@@ -24,11 +24,11 @@ This repository contains prebuilt devcontainer images for some of the languages 
 
 The following images are available:
 
-- .NET: `ghcr.io/iaingalloway/devcontainers/dotnet:1.5-dotnet10.0.203`
-- Go: `ghcr.io/iaingalloway/devcontainers/go:1.5-go1.26.0`
-- Hugo: `ghcr.io/iaingalloway/devcontainers/hugo:1.5-hugo0.161.1`
-- Javascript (Node): `ghcr.io/iaingalloway/devcontainers/javascript:1.5-node26.1.0`
-- Python: `ghcr.io/iaingalloway/devcontainers/python:1.5-python3.14.5`
+- .NET: [ghcr.io/iaingalloway/devcontainers/dotnet](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fdotnet)
+- Go: [ghcr.io/iaingalloway/devcontainers/go](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fgo)
+- Hugo: [ghcr.io/iaingalloway/devcontainers/hugo](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fhugo)
+- Javascript (Node): [ghcr.io/iaingalloway/devcontainers/javascript](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fjavascript)
+- Python: [ghcr.io/iaingalloway/devcontainers/python](https://github.com/iaingalloway/devcontainers/pkgs/container/devcontainers%2Fpython)
 
 ### Configure a project to use a devcontainer
 
@@ -38,7 +38,7 @@ The following images are available:
 ```json
 {
   "name": "My Awesome Project Devcontainer",
-  "image": "ghcr.io/iaingalloway/devcontainers/dotnet:1.4-dotnet10.0.101",
+  "image": "ghcr.io/iaingalloway/devcontainers/dotnet:latest",
   "runArgs": [
     "--name",
     "my-awesome-project-devcontainer",
